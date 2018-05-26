@@ -9,7 +9,9 @@ namespace cura {
 static int verbose_level;
 static bool progressLogging;
 
+#ifdef USE_G3LOG
 const unsigned int LOG_MSG_SIZE = 1024* 1024;
+#endif
 
 void increaseVerboseLevel()
 {
