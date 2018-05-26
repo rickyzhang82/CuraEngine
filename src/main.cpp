@@ -46,16 +46,18 @@ using namespace g3;
 
 #endif
 
+using namespace cura;
+
 void print_usage()
 {
-    cura::logError("usage: CuraEngine [-h] [-v] [-m 3x3matrix] [-c <config file>] [-s <settingkey>=<value>] -o <output.gcode> <model.stl>\n");
+    cLogError("usage: CuraEngine [-h] [-v] [-m 3x3matrix] [-c <config file>] [-s <settingkey>=<value>] -o <output.gcode> <model.stl>\n");
 }
 
 //Signal handler for a "floating point exception", which can also be integer division by zero errors.
 void signal_FPE(int n)
 {
     (void)n;
-    cura::logError("Arithmetic exception.\n");
+    cLogError("Arithmetic exception.\n");
     exit(1);
 }
 
@@ -85,27 +87,27 @@ int main(int argc, char **argv)
     fffProcessor processor(config);
     std::vector<std::string> files;
 
-    cura::logError("Cura_SteamEngine version %s\n", VERSION);
-    cura::logError("Copyright (C) 2014 David Braam\n");
-    cura::logError("\n");
-    cura::logError("This program is free software: you can redistribute it and/or modify\n");
-    cura::logError("it under the terms of the GNU Affero General Public License as published by\n");
-    cura::logError("the Free Software Foundation, either version 3 of the License, or\n");
-    cura::logError("(at your option) any later version.\n");
-    cura::logError("\n");
-    cura::logError("This program is distributed in the hope that it will be useful,\n");
-    cura::logError("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-    cura::logError("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-    cura::logError("GNU Affero General Public License for more details.\n");
-    cura::logError("\n");
-    cura::logError("You should have received a copy of the GNU Affero General Public License\n");
-    cura::logError("along with this program.  If not, see <http://www.gnu.org/licenses/>.\n");
+    cLogError("Cura_SteamEngine version %s\n", VERSION);
+    cLogError("Copyright (C) 2014 David Braam\n");
+    cLogError("\n");
+    cLogError("This program is free software: you can redistribute it and/or modify\n");
+    cLogError("it under the terms of the GNU Affero General Public License as published by\n");
+    cLogError("the Free Software Foundation, either version 3 of the License, or\n");
+    cLogError("(at your option) any later version.\n");
+    cLogError("\n");
+    cLogError("This program is distributed in the hope that it will be useful,\n");
+    cLogError("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+    cLogError("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+    cLogError("GNU Affero General Public License for more details.\n");
+    cLogError("\n");
+    cLogError("You should have received a copy of the GNU Affero General Public License\n");
+    cLogError("along with this program.  If not, see <http://www.gnu.org/licenses/>.\n");
 
     if(!config.readSettings()) {
-        cura::logError("Default config '%s' not used\n", DEFAULT_CONFIG_PATH);
+        cLogError("Default config '%s' not used\n", DEFAULT_CONFIG_PATH);
     }
     for(int argn = 1; argn < argc; argn++)
-        cura::log("Arg: %s\n", argv[argn]);
+        cLog("Arg: %s\n", argv[argn]);
 
     for(int argn = 1; argn < argc; argn++)
     {
@@ -139,7 +141,7 @@ int main(int argc, char **argv)
                     argn++;
                     if (!processor.setTargetFile(argv[argn]))
                     {
-                        cura::logError("Failed to open %s for output.\n", argv[argn]);
+                        cLogError("Failed to open %s for output.\n", argv[argn]);
                         exit(1);
                     }
                     break;
@@ -148,7 +150,7 @@ int main(int argc, char **argv)
                         // Read a config file from the given path
                         argn++;
                         if(!config.readSettings(argv[argn])) {
-                            cura::logError("Failed to read config '%s'\n", argv[argn]);
+                            cLogError("Failed to read config '%s'\n", argv[argn]);
                         }
                     }
                     break;
@@ -162,7 +164,7 @@ int main(int argc, char **argv)
                             *valuePtr++ = '\0';
 
                             if (!config.setSetting(argv[argn], valuePtr))
-                                cura::logError("Setting not found: %s %s\n", argv[argn], valuePtr);
+                                cLogError("Setting not found: %s %s\n", argv[argn], valuePtr);
                         }
                     }
                     break;
@@ -182,12 +184,12 @@ int main(int argc, char **argv)
                             processor.processFile(files);
                         files.clear();
                     }catch(...){
-                        cura::logError("Unknown exception\n");
+                        cLogError("Unknown exception\n");
                         exit(1);
                     }
                     break;
                 default:
-                    cura::logError("Unknown option: %c\n", *str);
+                    cLogError("Unknown option: %c\n", *str);
                     break;
                 }
             }
@@ -201,7 +203,7 @@ int main(int argc, char **argv)
                     tmp.push_back(argv[argn]);
                     processor.processFile(tmp);
                 }catch(...){
-                    cura::logError("Unknown exception\n");
+                    cLogError("Unknown exception\n");
                     exit(1);
                 }
             }else{
@@ -215,7 +217,7 @@ int main(int argc, char **argv)
         if (files.size() > 0)
             processor.processFile(files);
     }catch(...){
-        cura::logError("Unknown exception\n");
+        cLogError("Unknown exception\n");
         exit(1);
     }
     //Finalize the processor, this adds the end.gcode. And reports statistics.

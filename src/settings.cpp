@@ -6,6 +6,10 @@
 
 #include "settings.h"
 
+#ifndef USE_G3LOG
+using namespace cura;
+#endif
+
 #define LTRIM_STRING(s) do { while(((s).length() > 0) && isspace((s)[0])) { (s).erase(0, 1); } } while(0)
 #define RTRIM_STRING(s) do { while(((s).length() > 0) && isspace((s)[(s).length() - 1])) { (s).erase((s).length() - 1); } } while(0)
 #define TRIM_STRING(s) do { LTRIM_STRING(s); RTRIM_STRING(s); } while(0)
@@ -266,7 +270,7 @@ bool ConfigSettings::readSettings(const char* path) {
 
             // If we drop out but didn't finish reading, something failed
             if(!done_multiline) {
-                cura::logError("Config(%s):L%zd: Failed while reading multiline string.\n", path, line_number);
+                cLogError("Config(%s):L%zd: Failed while reading multiline string.\n", path, line_number);
                 return false;
             }
 
@@ -274,13 +278,13 @@ bool ConfigSettings::readSettings(const char* path) {
 
         // Fail if we don't get a key and val
         if(key.length() == 0 || (val.length() == 0 && !multilineContent)) {
-            cura::logError("Config(%s): Line %zd: No key value pair found\n", path, line_number);
+            cLogError("Config(%s): Line %zd: No key value pair found\n", path, line_number);
             return false;
         }
 
         // Set a config setting for the current K=V
         if(!setSetting(key.c_str(), val.c_str())) {
-            cura::logError("Config(%s):L%zd: Failed to set '%s' to '%s'\n", path, line_number, key.c_str(), val.c_str());
+            cLogError("Config(%s):L%zd: Failed to set '%s' to '%s'\n", path, line_number, key.c_str(), val.c_str());
             return false;
         }
     }

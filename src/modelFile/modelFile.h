@@ -9,6 +9,7 @@ The format returned is a Model class with an array of faces, which have integer 
 
 #include <vector>
 using std::vector;
+
 #include "../utils/intpoint.h"
 #include "../utils/floatpoint.h"
 

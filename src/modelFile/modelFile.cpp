@@ -7,6 +7,10 @@
 #include "../utils/logoutput.h"
 #include "../utils/cura_string.h"
 
+#ifndef USE_G3LOG
+using namespace cura;
+#endif
+
 FILE* binaryMeshBlob = nullptr;
 
 /* Custom fgets function to support Mac line-ends in Ascii STL files. OpenSCAD produces this when used on Mac */
@@ -164,7 +168,7 @@ SimpleModel* loadModelFromFile(SimpleModel *m,const char* filename, FMatrix3x3& 
             int32_t n, pNr = 0;
             if (fread(&n, 1, sizeof(int32_t), binaryMeshBlob) < 1)
                 return nullptr;
-            cura::log("Reading mesh from binary blob with %i vertexes\n", n);
+            cLog("Reading mesh from binary blob with %i vertexes\n", n);
             Point3 v[3];
             while(n)
             {

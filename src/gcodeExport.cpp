@@ -44,7 +44,7 @@ void GCodeExport::replaceTagInStart(const char* tag, const char* replaceValue)
 {
     if (f == stdout)
     {
-        cura::log("Replace:%s:%s\n", tag, replaceValue);
+        cLog("Replace:%s:%s\n", tag, replaceValue);
         return;
     }
     fpos_t oldPos;
@@ -402,11 +402,11 @@ void GCodeExport::tellFileSize() {
     float fsize = ftell(f);
     if(fsize > 1024*1024) {
         fsize /= 1024.0*1024.0;
-        cura::log("Wrote %5.1f MB.\n",fsize);
+        cLog("Wrote %5.1f MB.\n",fsize);
     }
     if(fsize > 1024) {
         fsize /= 1024.0;
-        cura::log("Wrote %5.1f kilobytes.\n",fsize);
+        cLog("Wrote %5.1f kilobytes.\n",fsize);
     }
 }
 
@@ -417,9 +417,9 @@ void GCodeExport::finalize(int maxObjectHeight, int moveSpeed, const char* endCo
     setZ(maxObjectHeight + 5000);
     writeMove(getPositionXY(), moveSpeed, 0);
     writeCode(endCode);
-    cura::log("Print time: %d\n", int(getTotalPrintTime()));
-    cura::log("Filament: %d\n", int(getTotalFilamentUsed(0)));
-    cura::log("Filament2: %d\n", int(getTotalFilamentUsed(1)));
+    cLog("Print time: %d\n", int(getTotalPrintTime()));
+    cLog("Filament: %d\n", int(getTotalFilamentUsed(0)));
+    cLog("Filament2: %d\n", int(getTotalFilamentUsed(1)));
     
     if (getFlavor() == GCODE_FLAVOR_ULTIGCODE)
     {

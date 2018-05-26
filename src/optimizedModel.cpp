@@ -6,6 +6,11 @@
 #include "optimizedModel.h"
 
 #define MELD_DIST MM2INT(0.03)
+
+#ifndef USE_G3LOG
+using namespace cura;
+#endif
+
 OptimizedVolume::OptimizedVolume(SimpleVolume* volume, OptimizedModel* model)
 : model(model)
 {
@@ -18,7 +23,7 @@ OptimizedVolume::OptimizedVolume(SimpleVolume* volume, OptimizedModel* model)
     for(uint32_t i=0; i<volume->faces.size(); i++)
     {
         OptimizedFace f;
-        if((i%1000==0) && (getTime()-t)>2.0) cura::logProgress("optimized", i + 1, volume->faces.size());
+        if((i%1000==0) && (getTime()-t)>2.0) cLogProgress("optimized", i + 1, volume->faces.size());
         for(uint32_t j=0; j<3; j++)
         {
             Point3 p = volume->faces[i].v[j];

@@ -79,8 +79,8 @@ public:
         processSliceData(storage);
         writeGCode(storage);
 
-        cura::logProgress("process", 1, 1);//Report the GUI that a file has been fully processed.
-        cura::log("Total time elapsed %5.2fs.\n", timeKeeperTotal.restart());
+        cLogProgress("process", 1, 1);//Report the GUI that a file has been fully processed.
+        cLog("Total time elapsed %5.2fs.\n", timeKeeperTotal.restart());
         guiSocket.sendNr(GUI_CMD_FINISH_OBJECT);
 
         return true;
@@ -127,7 +127,7 @@ private:
 
                 int32_t vertexCount = guiSocket.recvNr();
                 int pNr = 0;
-                cura::log("Reading mesh from socket with %i vertexes\n", vertexCount);
+                cLog("Reading mesh from socket with %i vertexes\n", vertexCount);
                 Point3 v[3];
                 while(vertexCount)
                 {
@@ -149,41 +149,41 @@ private:
                 if(files[i] == "-")
                     model->volumes.push_back(SimpleVolume());
                 else {
-                    cura::log("Loading %s from disk...\n", files[i].c_str());
+                    cLog("Loading %s from disk...\n", files[i].c_str());
                     SimpleModel *test = loadModelFromFile(model,files[i].c_str(), config.matrix);
                     if(test == nullptr) { // error while reading occurred
-                        cura::logError("Failed to load model: %s\n", files[i].c_str());
+                        cLogError("Failed to load model: %s\n", files[i].c_str());
                         return false;
                     }
                 }
             }
         }
-        cura::log("Loaded from disk in %5.3fs\n", timeKeeper.restart());
-        cura::log("Analyzing and optimizing model...\n");
+        cLog("Loaded from disk in %5.3fs\n", timeKeeper.restart());
+        cLog("Analyzing and optimizing model...\n");
         OptimizedModel* optimizedModel = new OptimizedModel(model, Point3(config.objectPosition.X, config.objectPosition.Y, -config.objectSink));
         for(unsigned int v = 0; v < model->volumes.size(); v++)
         {
-            cura::log("  Face counts: %i -> %i %0.1f%%\n", (int)model->volumes[v].faces.size(), (int)optimizedModel->volumes[v].faces.size(), float(optimizedModel->volumes[v].faces.size()) / float(model->volumes[v].faces.size()) * 100);
-            cura::log("  Vertex counts: %i -> %i %0.1f%%\n", (int)model->volumes[v].faces.size() * 3, (int)optimizedModel->volumes[v].points.size(), float(optimizedModel->volumes[v].points.size()) / float(model->volumes[v].faces.size() * 3) * 100);
-            cura::log("  Size: %f %f %f\n", INT2MM(optimizedModel->modelSize.x), INT2MM(optimizedModel->modelSize.y), INT2MM(optimizedModel->modelSize.z));
-            cura::log("  vMin: %f %f %f\n", INT2MM(optimizedModel->vMin.x), INT2MM(optimizedModel->vMin.y), INT2MM(optimizedModel->vMin.z));
-            cura::log("  vMax: %f %f %f\n", INT2MM(optimizedModel->vMax.x), INT2MM(optimizedModel->vMax.y), INT2MM(optimizedModel->vMax.z));
-            cura::log("  vMin: %f %f %f\n", INT2MM(model->min().x), INT2MM(model->min().y), INT2MM(model->min().z));
-            cura::log("  vMax: %f %f %f\n", INT2MM(model->max().x), INT2MM(model->max().y), INT2MM(model->max().z));
-            cura::log("  Matrix: %f %f %f\n", config.matrix.m[0][0], config.matrix.m[1][0], config.matrix.m[2][0]);
-            cura::log("  Matrix: %f %f %f\n", config.matrix.m[0][1], config.matrix.m[1][1], config.matrix.m[2][1]);
-            cura::log("  Matrix: %f %f %f\n", config.matrix.m[0][2], config.matrix.m[1][2], config.matrix.m[2][2]);
+            cLog("  Face counts: %i -> %i %0.1f%%\n", (int)model->volumes[v].faces.size(), (int)optimizedModel->volumes[v].faces.size(), float(optimizedModel->volumes[v].faces.size()) / float(model->volumes[v].faces.size()) * 100);
+            cLog("  Vertex counts: %i -> %i %0.1f%%\n", (int)model->volumes[v].faces.size() * 3, (int)optimizedModel->volumes[v].points.size(), float(optimizedModel->volumes[v].points.size()) / float(model->volumes[v].faces.size() * 3) * 100);
+            cLog("  Size: %f %f %f\n", INT2MM(optimizedModel->modelSize.x), INT2MM(optimizedModel->modelSize.y), INT2MM(optimizedModel->modelSize.z));
+            cLog("  vMin: %f %f %f\n", INT2MM(optimizedModel->vMin.x), INT2MM(optimizedModel->vMin.y), INT2MM(optimizedModel->vMin.z));
+            cLog("  vMax: %f %f %f\n", INT2MM(optimizedModel->vMax.x), INT2MM(optimizedModel->vMax.y), INT2MM(optimizedModel->vMax.z));
+            cLog("  vMin: %f %f %f\n", INT2MM(model->min().x), INT2MM(model->min().y), INT2MM(model->min().z));
+            cLog("  vMax: %f %f %f\n", INT2MM(model->max().x), INT2MM(model->max().y), INT2MM(model->max().z));
+            cLog("  Matrix: %f %f %f\n", config.matrix.m[0][0], config.matrix.m[1][0], config.matrix.m[2][0]);
+            cLog("  Matrix: %f %f %f\n", config.matrix.m[0][1], config.matrix.m[1][1], config.matrix.m[2][1]);
+            cLog("  Matrix: %f %f %f\n", config.matrix.m[0][2], config.matrix.m[1][2], config.matrix.m[2][2]);
             if (INT2MM(optimizedModel->modelSize.x) > 10000.0 || INT2MM(optimizedModel->modelSize.y)  > 10000.0 || INT2MM(optimizedModel->modelSize.z) > 10000.0)
             {
-                cura::logError("Object is way to big, CuraEngine bug?");
+                cLogError("Object is way to big, CuraEngine bug?");
                 exit(1);
             }
         }
         delete model;
-        cura::log("Optimize model %5.3fs \n", timeKeeper.restart());
+        cLog("Optimize model %5.3fs \n", timeKeeper.restart());
         //om->saveDebugSTL("c:\\models\\output.stl");
 
-        cura::log("Slicing model...\n");
+        cLog("Slicing model...\n");
         vector<Slicer*> slicerList;
         for(unsigned int volumeIdx=0; volumeIdx < optimizedModel->volumes.size(); volumeIdx++)
         {
@@ -196,9 +196,9 @@ private:
                 sendPolygonsToGui("openoutline", layerNr, slicer->layers[layerNr].z, slicer->layers[layerNr].openPolygons);
             }
         }
-        cura::log("Sliced model in %5.3fs\n", timeKeeper.restart());
+        cLog("Sliced model in %5.3fs\n", timeKeeper.restart());
 
-        cura::log("Generating support map...\n");
+        cLog("Generating support map...\n");
         generateSupportGrid(storage.support, optimizedModel, config.supportAngle, config.supportEverywhere > 0, config.supportXYDistance, config.supportZDistance);
 
         storage.modelSize = optimizedModel->modelSize;
@@ -206,7 +206,7 @@ private:
         storage.modelMax = optimizedModel->vMax;
         delete optimizedModel;
 
-        cura::log("Generating layer parts...\n");
+        cLog("Generating layer parts...\n");
         for(unsigned int volumeIdx=0; volumeIdx < slicerList.size(); volumeIdx++)
         {
             storage.volumes.push_back(SliceVolumeStorage());
@@ -220,7 +220,7 @@ private:
         //DEBUG: output parts
         dumpLayerparts(storage, "/tmp/parts.html");
         cura::PolygonHelper::savePartsToFile(storage);
-        cura::log("Generated layer parts in %5.3fs\n", timeKeeper.restart());
+        cLog("Generated layer parts in %5.3fs\n", timeKeeper.restart());
         return true;
     }
 
@@ -270,7 +270,7 @@ private:
                     }
                 }
             }
-            cura::logProgress("inset",layerNr+1,totalLayers);
+            cLogProgress("inset",layerNr+1,totalLayers);
         }
         if (config.enableOozeShield)
         {
@@ -295,7 +295,7 @@ private:
             for(unsigned int layerNr=totalLayers-1; layerNr>0; layerNr--)
                 storage.oozeShield[layerNr-1] = storage.oozeShield[layerNr-1].unionPolygons(storage.oozeShield[layerNr].offset(-offsetAngle));
         }
-        cura::log("Generated inset in %5.3fs\n", timeKeeper.restart());
+        cLog("Generated inset in %5.3fs\n", timeKeeper.restart());
 
         for(unsigned int layerNr=0; layerNr<totalLayers; layerNr++)
         {
@@ -314,9 +314,9 @@ private:
                         sendPolygonsToGui("skin", layerNr, layer->printZ, layer->parts[partNr].skinOutline);
                 }
             }
-            cura::logProgress("skin",layerNr+1,totalLayers);
+            cLogProgress("skin",layerNr+1,totalLayers);
         }
-        cura::log("Generated up/down skin in %5.3fs\n", timeKeeper.restart());
+        cLog("Generated up/down skin in %5.3fs\n", timeKeeper.restart());
 
         if (config.wipeTowerSize > 0)
         {
@@ -436,7 +436,7 @@ private:
         int volumeIdx = 0;
         for(unsigned int layerNr=0; layerNr<totalLayers; layerNr++)
         {
-            cura::logProgress("export", layerNr+1, totalLayers);
+            cLogProgress("export", layerNr+1, totalLayers);
 
             int extrusionWidth = config.extrusionWidth;
             if (layerNr == 0)
@@ -517,7 +517,7 @@ private:
             gcodeLayer.writeGCode(config.coolHeadLift > 0, static_cast<int>(layerNr) > 0 ? config.layerThickness : config.initialLayerThickness);
         }
 
-        cura::log("Wrote layers in %5.2fs.\n", timeKeeper.restart());
+        cLog("Wrote layers in %5.2fs.\n", timeKeeper.restart());
         gcode.tellFileSize();
         gcode.writeFanCommand(0);
 

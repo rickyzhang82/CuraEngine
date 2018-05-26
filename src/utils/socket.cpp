@@ -18,6 +18,8 @@
 bool wsaStartupDone = false;
 #endif
 
+using namespace cura;
+
 ClientSocket::ClientSocket()
 {
     sockfd = -1;
@@ -97,7 +99,7 @@ void ClientSocket::recvAll(void* data, int length)
         int n = recv(sockfd, ptr, length, 0);
         if (n <= 0)
         {
-            cura::log("ClientSocket::recvAll error...");
+            cLog("ClientSocket::recvAll error code: %d ...", n);
             close();
             return;
         }
