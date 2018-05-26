@@ -1,0 +1,87 @@
+digraph dependencies {
+  fontname = "Bitstream Vera Sans"
+  fontsize = 8  node [    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    shape = "record"
+  ]
+  edge [
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+  ]
+id782644e27ac85631d596f97a6542bb30 [ 
+   label = "{cura::PolygonRef|+ PolygonRef(ClipperLib::Path &) : void\l+ add(const Point) : void\l+ area() const : double\l+ begin() : ClipperLib::Path::iterator\l+ begin() const : ClipperLib::Path::const_iterator\l+ centerOfMass() const : Point\l+ clear() : void\l+ closestPointTo(Point) : Point\l+ data*() : void\l+ end() : ClipperLib::Path::iterator\l+ end() const : ClipperLib::Path::const_iterator\l+ inside(Point) : bool\l+ operator[](unsigned int) const : Point\l+ orientation() const : bool\l+ polygonLength() const : int64_t\l+ remove(unsigned int) : void\l+ reverse() : void\l+ sizeint () const : unsigned\l|- polygon: ClipperLib::Path *\l- PolygonRef() : void\l}"  ]
+idfb3c8eb1ce3b262968fb73b20e46ac6d [ 
+   label = "{cura::Polygon|+ Polygon() : void\l+ Polygon(const cura::PolygonRef &) : void\l|- poly: ClipperLib::Path\l}"  ]
+id351be52f9b70e55dd2d728b5835e4512 [ 
+   label = "{cura::Polygons|+ Polygons() : void\l+ Polygons(const cura::Polygons &) : void\l+ add(const cura::PolygonRef &) : void\l+ add(const cura::Polygons &) : void\l+ applyMatrix(const PointMatrix &) : void\l+ clear() : void\l+ difference(const cura::Polygons &) const : cura::Polygons\l+ inside(Point) : bool\l+ intersection(const cura::Polygons &) const : cura::Polygons\l+ newPoly() : cura::PolygonRef\l+ offset(int) const : cura::Polygons\l+ operator=&(const cura::Polygons &) : cura::Polygons\l+ operator[](unsigned int) : cura::PolygonRef\l+ polygonLength() const : int64_t\l+ processEvenOdd() const : cura::Polygons\l+ remove(unsigned int) : void\l+ sizeint () : unsigned\l+ splitIntoParts(bool) const : vector\<cura::Polygons\>\l+ unionPolygons(const cura::Polygons &) const : cura::Polygons\l|- polygons: ClipperLib::Paths\l- _processPolyTreeNode(ClipperLib::PolyNode *, vector\<cura::Polygons\> &) const : void\l}"  ]
+id71bc20e63eda0002370a670b042f9a7e [ 
+   label = "{cura::AABB|+ max: Point\l+ min: Point\l+ AABB() : void\l+ AABB(cura::Polygons) : void\l+ calculate(cura::Polygons) : void\l+ hit(const cura::AABB &) const : bool\l}"  ]
+ide6655da58558e25a8cf1a444a7454217 [ 
+   label = "{cura::SliceLayerPart|+ boundaryBox: cura::AABB\l+ combBoundery: cura::Polygons\l+ insets: vector\<cura::Polygons\>\l+ outline: cura::Polygons\l+ skinOutline: cura::Polygons\l+ sparseOutline: cura::Polygons\l}"  ]
+idb0e347a4ab5e167adb46ee178ed8c290 [ 
+   label = "{cura::SliceLayer|+ openLines: cura::Polygons\l+ parts: vector\<cura::SliceLayerPart\>\l+ printZ: int\l+ sliceZ: int\l}"  ]
+id2f514ab529233e97b0274640de0ac778 [ 
+   label = "{cura::SupportPoint|+ cosAngle: double\l+ z: int32_t\l+ SupportPoint(int32_t, double) : void\l}"  ]
+id61b5a8e54d5c19a2344a7f6d92cb7df4 [ 
+   label = "{cura::SupportStorage|+ XYDistance: int\l+ ZDistance: int\l+ angle: int\l+ everywhere: bool\l+ generated: bool\l+ grid: vector\<cura::SupportPoint\> *\l+ gridHeight: int32_t\l+ gridOffset: Point\l+ gridScale: int32_t\l+ gridWidth: int32_t\l+ SupportStorage() : void\l+ ~SupportStorage() : void\l}"  ]
+id71ddc52046e8d9b9bd3c46e8080fcaf1 [ 
+   label = "{cura::SliceVolumeStorage|+ layers: vector\<cura::SliceLayer\>\l}"  ]
+id509212fb479eb255da6613f3b7467f53 [ 
+   label = "{cura::SliceDataStorage|+ modelMax: Point3\l+ modelMin: Point3\l+ modelSize: Point3\l+ oozeShield: vector\<cura::Polygons\>\l+ raftOutline: cura::Polygons\l+ skirt: cura::Polygons\l+ support: cura::SupportStorage\l+ volumes: vector\<cura::SliceVolumeStorage\>\l+ wipePoint: Point\l+ wipeTower: cura::Polygons\l}"  ]
+ided88bd86d474e47a3b1f4c6a19cdf66f [ 
+   label = "{cura::SlicerSegment|+ addedToPolygon: bool\l+ end: Point\l+ faceIndex: int\l+ start: Point\l}"  ]
+id701ec4f99b9fb59ff5b66fbe54b18df8 [ 
+   label = "{cura::closePolygonResult|+ intersectionPoint: Point\l+ pointIdx: unsigned int\l+ polygonIdx: int\l}"  ]
+id8c09c2a4d14b4b0a068c403cff52fb41 [ 
+   label = "{cura::gapCloserResult|+ AtoB: bool\l+ len: int64_t\l+ pointIdxA: unsigned int\l+ pointIdxB: unsigned int\l+ polygonIdx: int\l}"  ]
+id7fdb258ebb43dc58ccb3dcf436f5449f [ 
+   label = "{cura::SlicerLayer|+ faceToSegmentIndex: std::map\<int, int\>\l+ openPolygons: cura::Polygons\l+ polygonList: cura::Polygons\l+ segmentList: std::vector\<SlicerSegment\>\l+ z: int\l+ makePolygons(OptimizedVolume *, bool, bool) : void\l|- findPolygonGapCloser(Point, Point) : cura::gapCloserResult\l- findPolygonPointClosestTo(Point) : cura::closePolygonResult\l}"  ]
+ida314bf81380b8b5233853b1d27fc483c [ 
+   label = "{cura::Slicer|+ layers: std::vector\<SlicerLayer\>\l+ modelMin: Point3\l+ modelSize: Point3\l+ Slicer(OptimizedVolume *, int32_t, int32_t, bool, bool) : void\l+ dumpSegmentsToHTML(const char *) : void\l+ project2D(Point3 &, Point3 &, Point3 &, int32_t) const : cura::SlicerSegment\l}"  ]
+id557f20f6bad32d9e2b6606c0fb5c3938 [ 
+   label = "{cura::PolygonHelper|+ PolygonHelper() : void\l+ savePartsToFile(cura::SliceDataStorage &) : void\l}"  ]
+id52d0869f7f286438a43c7918cdd24421 [ 
+   label = "{cura::SupportPolyGenerator|+ polygons: cura::Polygons\l+ SupportPolyGenerator(cura::SupportStorage &, int32_t) : void\l|- cosAngle: double\l- done: int *\l- everywhere: bool\l- storage: cura::SupportStorage &\l- supportZDistance: int\l- z: int32_t\l- lazyFill(Point) : void\l- needSupportAt(Point) : bool\l}"  ]
+idbd9de60268684af72efe11afbcec3648 [ 
+   label = "{cura::PathOrderOptimizer|+ polyOrder: vector\<int\>\l+ polyStart: vector\<int\>\l+ polygons: vector\<cura::PolygonRef\>\l+ startPoint: Point\l+ PathOrderOptimizer(Point) : void\l+ addPolygon(cura::PolygonRef) : void\l+ addPolygons(cura::Polygons &) : void\l+ optimize() : void\l}"  ]
+id5e02e9324011b37beba3b8e2ffc28b21 [ 
+   label = "{cura::Comb|+ Comb(cura::Polygons &) : void\l+ calc(Point, Point, vector\<Point\> &) : bool\l+ inside(const Point) : bool\l+ moveInside(Point *, int) : bool\l+ ~Comb() noexcept : void\l|- boundery: cura::Polygons &\l- ep: Point\l- matrix: PointMatrix\l- maxIdx: unsigned int *\l- maxX: int64_t *\l- minIdx: unsigned int *\l- minX: int64_t *\l- sp: Point\l- calcMinMax() : void\l- collisionTest(Point, Point) : bool\l- getBounderyPointWithOffset(unsigned int, unsigned int) : Point\l- getPolygonAboveint (int64_t) : unsigned\l- preTest(Point, Point) : bool\l}"  ]
+id9446046a5b5699e9a8b6619aa795dc21 [ 
+   label = "{cura::GCodeExport|+ GCodeExport() : void\l+ applyAccelerationSettings(ConfigSettings &) : void\l+ finalize(int, int, const char *) : void\l+ getExtruderNr() : int\l+ getFileSize() : int\l+ getFlavor() : int\l+ getPositionXY() : Point\l+ getPositionZ() : int\l+ getStartPositionXY() : Point\l+ getTotalFilamentUsed(int) : double\l+ getTotalPrintTime() : double\l+ isOpened() : bool\l+ replaceTagInStart(const char *, const char *) : void\l+ resetExtrusionValue() : void\l+ resetStartPosition() : void\l+ setExtruderOffset(int, Point) : void\l+ setExtrusion(int, int, int) : void\l+ setFilename(const char *) : void\l+ setFlavor(int) : void\l+ setRetractionSettings(int, int, int, int, int, int) : void\l+ setSwitchExtruderCode(std::string, std::string) : void\l+ setZ(int) : void\l+ switchExtruder(int) : void\l+ tellFileSize() : void\l+ updateTotalPrintTime() : void\l+ writeCode(const char *) : void\l+ writeComment(const char *, ...) : void\l+ writeDelay(double) : void\l+ writeFanCommand(int) : void\l+ writeLine(const char *, ...) : void\l+ writeMove(Point, int, int) : void\l+ writeRetraction(bool) : void\l+ ~GCodeExport() throw() : void\l|- currentFanSpeed: int\l- currentPosition: Point3\l- currentSpeed: int\l- estimateCalculator: TimeEstimateCalculator\l- extruderCharacter: char [16]\l- extruderNr: int\l- extruderOffset: Point [16]\l- extruderSwitchRetraction: double\l- extrusionAmount: double\l- extrusionAmountAtPreviousRetraction: double\l- extrusionPerMM: double\l- f: FILE *\l- flavor: int\l- isRetracted: bool\l- minimalExtrusionBeforeRetraction: double\l- postSwitchExtruderCode: std::string\l- preSwitchExtruderCode: std::string\l- retractionAmount: double\l- retractionAmountPrime: double\l- retractionSpeed: int\l- retractionZHop: int\l- startPosition: Point3\l- totalFilament: double [16]\l- totalPrintTime: double\l- zPos: int\l}"  ]
+ide481c2a4c69c9db6acac416fe3926885 [ 
+   label = "{cura::GCodePathConfig|+ lineWidth: int\l+ name: const char *\l+ speed: int\l+ spiralize: bool\l+ GCodePathConfig() : void\l+ GCodePathConfig(int, int, const char *) : void\l+ setData(int, int, const char *) : void\l}"  ]
+ida64a9b00110a9beef1bc5b9b455739c0 [ 
+   label = "{cura::GCodePath|+ config: cura::GCodePathConfig *\l+ done: bool\l+ extruder: int\l+ points: vector\<Point\>\l+ retract: bool\l}"  ]
+ide54d0cb6ad04998abc7cb52d585fa155 [ 
+   label = "{cura::GCodePlanner|+ GCodePlanner(cura::GCodeExport &, int, int) : void\l+ addExtrusionMove(Point, cura::GCodePathConfig *) : void\l+ addPolygon(cura::PolygonRef, int, cura::GCodePathConfig *) : void\l+ addPolygonsByOptimizer(cura::Polygons &, cura::GCodePathConfig *) : void\l+ addTravel(Point) : void\l+ forceMinimalLayerTime(double, int) : void\l+ forceRetract() : void\l+ getExtrudeSpeedFactor() : int\l+ getExtruder() : int\l+ getTravelSpeedFactor() : int\l+ moveInsideCombBoundary(int) : void\l+ setAlwaysRetract(bool) : void\l+ setCombBoundary(cura::Polygons *) : void\l+ setExtrudeSpeedFactor(int) : void\l+ setExtruder(int) : bool\l+ setTravelSpeedFactor(int) : void\l+ writeGCode(bool, int) : void\l+ ~GCodePlanner() noexcept : void\l|- alwaysRetract: bool\l- comb: cura::Comb *\l- currentExtruder: int\l- extraTime: double\l- extrudeSpeedFactor: int\l- forceRetraction: bool\l- gcode: cura::GCodeExport &\l- lastPosition: Point\l- paths: vector\<cura::GCodePath\>\l- retractionMinimalDistance: int\l- totalPrintTime: double\l- travelConfig: cura::GCodePathConfig\l- travelSpeedFactor: int\l- forceNewPathStart() : void\l- getLatestPathWithConfig*(cura::GCodePathConfig *) : cura::GCodePath\l}"  ]
+idf5a7e63f61bd553291c6e17d2d52df28 [ 
+   label = "{cura::fffProcessor|+ fffProcessor(ConfigSettings &) : void\l+ finalize() : void\l+ guiConnect(int) : void\l+ processFile(const std::vector\<std::string\> &) : bool\l+ sendPolygonsToGui(const char *, int, int32_t, cura::Polygons &) : void\l+ setTargetFile(const char *) : bool\l|- config: ConfigSettings &\l- fileNr: int\l- gcode: cura::GCodeExport\l- guiSocket: ClientSocket\l- infillConfig: cura::GCodePathConfig\l- inset0Config: cura::GCodePathConfig\l- insetXConfig: cura::GCodePathConfig\l- maxObjectHeight: int\l- skinConfig: cura::GCodePathConfig\l- skirtConfig: cura::GCodePathConfig\l- supportConfig: cura::GCodePathConfig\l- timeKeeper: TimeKeeper\l- addInfillToGCode(cura::SliceLayerPart *, cura::GCodePlanner &, int, int, int) : void\l- addInsetToGCode(cura::SliceLayerPart *, cura::GCodePlanner &, int) : void\l- addSupportToGCode(cura::SliceDataStorage &, cura::GCodePlanner &, int) : void\l- addVolumeLayerToGCode(cura::SliceDataStorage &, cura::GCodePlanner &, int, int) : void\l- addWipeTower(cura::SliceDataStorage &, cura::GCodePlanner &, int, int) : void\l- preSetup() : void\l- prepareModel(cura::SliceDataStorage &, const std::vector\<std::string\> &) : bool\l- processSliceData(cura::SliceDataStorage &) : void\l- writeGCode(cura::SliceDataStorage &) : void\l}"  ]
+
+edge [arrowhead = open]
+ide6655da58558e25a8cf1a444a7454217->id71bc20e63eda0002370a670b042f9a7e
+ide6655da58558e25a8cf1a444a7454217->id351be52f9b70e55dd2d728b5835e4512
+idb0e347a4ab5e167adb46ee178ed8c290->id351be52f9b70e55dd2d728b5835e4512
+idb0e347a4ab5e167adb46ee178ed8c290->ide6655da58558e25a8cf1a444a7454217
+id61b5a8e54d5c19a2344a7f6d92cb7df4->id2f514ab529233e97b0274640de0ac778
+id71ddc52046e8d9b9bd3c46e8080fcaf1->idb0e347a4ab5e167adb46ee178ed8c290
+id509212fb479eb255da6613f3b7467f53->id61b5a8e54d5c19a2344a7f6d92cb7df4
+id509212fb479eb255da6613f3b7467f53->id71ddc52046e8d9b9bd3c46e8080fcaf1
+id509212fb479eb255da6613f3b7467f53->id351be52f9b70e55dd2d728b5835e4512
+id7fdb258ebb43dc58ccb3dcf436f5449f->ided88bd86d474e47a3b1f4c6a19cdf66f
+id7fdb258ebb43dc58ccb3dcf436f5449f->id351be52f9b70e55dd2d728b5835e4512
+ida314bf81380b8b5233853b1d27fc483c->id7fdb258ebb43dc58ccb3dcf436f5449f
+id52d0869f7f286438a43c7918cdd24421->id61b5a8e54d5c19a2344a7f6d92cb7df4
+id52d0869f7f286438a43c7918cdd24421->id351be52f9b70e55dd2d728b5835e4512
+idbd9de60268684af72efe11afbcec3648->id782644e27ac85631d596f97a6542bb30
+id5e02e9324011b37beba3b8e2ffc28b21->id351be52f9b70e55dd2d728b5835e4512
+ida64a9b00110a9beef1bc5b9b455739c0->ide481c2a4c69c9db6acac416fe3926885
+ide54d0cb6ad04998abc7cb52d585fa155->ida64a9b00110a9beef1bc5b9b455739c0
+ide54d0cb6ad04998abc7cb52d585fa155->id5e02e9324011b37beba3b8e2ffc28b21
+ide54d0cb6ad04998abc7cb52d585fa155->ide481c2a4c69c9db6acac416fe3926885
+ide54d0cb6ad04998abc7cb52d585fa155->id9446046a5b5699e9a8b6619aa795dc21
+idf5a7e63f61bd553291c6e17d2d52df28->id9446046a5b5699e9a8b6619aa795dc21
+idf5a7e63f61bd553291c6e17d2d52df28->ide481c2a4c69c9db6acac416fe3926885
+
+edge [arrowhead = empty]
+idfb3c8eb1ce3b262968fb73b20e46ac6d->id782644e27ac85631d596f97a6542bb30
+}
