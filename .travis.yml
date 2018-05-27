@@ -8,4 +8,8 @@ matrix:
       compiler: gcc
 
 script:
-  - sh clean-build.sh production 
+  - rm -rf build
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_G3LOG=OFF ..
+  - make VERBOSE=1 -j 8

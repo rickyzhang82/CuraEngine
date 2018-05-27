@@ -1,5 +1,7 @@
 # Make legacy Cura Engine great again!
 
+![build-status](https://travis-ci.org/rickyzhang82/CuraEngine.svg?branch=master)
+
 # What
 This is an organic growing Cura Engine repository forked from [Cura 15.04 legacy branch](https://github.com/Ultimaker/CuraEngine/tree/legacy). My short-term goal is to experiment the feature that optimizes path planning with asymmetry traveling salesman solver. The long-term goal is to **make legacy Cura Engine great again** (no political implication here). Your contribution is always welcome.
 
