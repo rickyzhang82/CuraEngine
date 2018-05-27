@@ -30,7 +30,7 @@ The motivation behind this branching philosophy is that I'm a Occam's razors pri
 
 # Progress
 Things I have done so far:
-- Shared my 15.04 source code notes and 15.04 class UML in this wiki.
+- Shared my 15.04 source code notes and 15.04 class UML in [this wiki](https://github.com/rickyzhang82/CuraEngine/wiki).
 - Enhanced logging with G3LOG
 - Enabled CMake build
 
