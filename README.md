@@ -36,6 +36,7 @@ Things I have done so far:
 
 # Future
  Things I will do next:
+- Write a developer guide
 - Enable CI like Travis
 - Improve path planning
 - Promote this legacy repository to non UM brand hackers
