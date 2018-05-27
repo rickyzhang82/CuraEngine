@@ -34,14 +34,16 @@ One can argue that engine needs to be as much flexible as possible. Thus, you ne
 
 # Progress
 Things I have done so far:
+
 - Shared my 15.04 source code notes and 15.04 class UML in [this wiki](https://github.com/rickyzhang82/CuraEngine/wiki).
 - Wrote a developer guide.
-- Enhanced logging with G3LOG
-- Enabled CMake build
+- Enhanced logging with G3LOG.
+- Enabled CMake build.
+- Enabled CI in Travis.
 
 # Future
  Things I will do next:
-- Enable CI like Travis
+
 - Improve path planning
 - Promote this legacy repository to non UM brand hackers
 - Make legacy Cura Engine great again!
