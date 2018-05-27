@@ -1,4 +1,4 @@
-# Make legacy Cura Engine great again
+# Make legacy Cura Engine great again!
 
 # What
 This is an organic growing Cura Engine repository forked from [Cura 15.04 legacy branch](https://github.com/Ultimaker/CuraEngine/tree/legacy). My short-term goal is to experiment the feature that optimizes path planning with asymmetry traveling salesman solver. The long-term goal is to **make legacy Cura Engine great again** (no political implication here). Your contribution is always welcome.
@@ -24,20 +24,23 @@ I will have two branch in public: stable and dev branch.
 
 The stable branch is master branch. If your PR is related to support new hardware setting like dual extruders or a critical bug fix or performance improvement, chances are you are in this category. I will merge it into stable branch ASAP.
 
-The dev branch is for experiment purpose. All dev branch should start with prefix `dev-`. If you require a new settings in profile, chances are you are in dev branch. Things like changing path planning for one particular STL model belongs to this category. I will accept your PR as a separate branch for experimental purpose. After an extended long period of test and usage, I will consider merging it to the stable branch.
+The dev branch is for experiment purpose. All dev branch should start with prefix `dev-`. If you require a new print settings in profile, chances are you are in dev branch. Things like changing path planning for one particular STL model belongs to this category. I will accept your PR as a separate branch for experimental purpose. After an extended long period of test and usage, I will consider merging it to the stable branch.
+
+The motivation behind this branching philosophy is that I'm a Occam's razors principle believer. My working experiences makes me believe that the solution with fewest assumption is always the best. We should limit the number of settings of slicing engine at all cost. One can argue that engine needs to be as much flexible as possible. Thus, you need tons of settings to tweak. Well, if you are not a programmer but as an end user, this might be a fair statement. But this is a disaster for engineering. Also, when the complexity of settings reach a certain level, no one (not even one single programmer) can understand the consequence of the choice you make. Image you have 100 settings and each have 3 options, you got 3^100 combination to tweak. Good luck to solve that by you. Not even a computer AI can solve this NPC problem.
 
 # Progress
-Several new things I have done so far:
+Things I have done so far:
 - Shared my 15.04 source code notes and 15.04 class UML in this wiki.
 - Enhanced logging with G3LOG
 - Enabled CMake build
 
 # Future
-Several things I will do next:
+ Things I will do next:
 - Enable CI like Travis
 - Improve path planning
 - Promote this legacy repository to non UM brand hackers
 - Make legacy Cura Engine great again!
 
 Happy hacking!
+
 Ricky
