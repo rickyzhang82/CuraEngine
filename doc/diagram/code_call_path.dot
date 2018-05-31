@@ -1,0 +1,45 @@
+digraph dependencies {
+fontname = "Bitstream Vera Sans"
+fontsize = 8  node [    fontname = "Bitstream Vera Sans"
+  fontsize = 8
+  shape = "record"
+]
+edge [
+  fontname = "Bitstream Vera Sans"
+  fontsize = 8
+]
+
+processFile [label = "fffProcessor::processFile"]
+
+preSetup [label = "fffProcessor::preSetup"]
+
+preparemodel [label = "fffProcessor::preparemodel"]
+
+processSliceData [label = "fffProcessor::processSliceData"]
+
+writeGCode [label = "fffProcessor::writeGCode"]
+
+addSupportToGCode [label = "fffProcessor::addSupportToGCode"]
+
+addVolumeToGCode [label = "fffProcessor::addVolumeToGCode"]
+
+GCodePlanner_writeGCode [label = "GCodePlanner::writeGCode"]
+
+addInfillToGCode [label = "fffProcessor::addInfillToGCode"]
+addInsetToGCode [label = "fffProcessor::addInsetToGCode "]
+
+edge [arrowhead = open]
+processFile->preSetup
+processFile->preparemodel
+processFile->processSliceData
+processFile->writeGCode
+
+writeGCode->addSupportToGCode
+writeGCode->addVolumeToGCode
+writeGCode->GCodePlanner_writeGCode
+
+addVolumeToGCode->addInfillToGCode
+addVolumeToGCode->addInsetToGCode
+
+
+}
