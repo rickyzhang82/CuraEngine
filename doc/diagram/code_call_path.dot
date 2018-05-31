@@ -21,7 +21,7 @@ writeGCode [label = "fffProcessor::writeGCode"]
 
 addSupportToGCode [label = "fffProcessor::addSupportToGCode"]
 
-addVolumeToGCode [label = "fffProcessor::addVolumeToGCode"]
+addVolumeLayerToGCode [label = "fffProcessor::addVolumeLayerToGCode"]
 
 GCodePlanner_writeGCode [label = "GCodePlanner::writeGCode"]
 
@@ -35,11 +35,11 @@ processFile->processSliceData
 processFile->writeGCode
 
 writeGCode->addSupportToGCode
-writeGCode->addVolumeToGCode
+writeGCode->addVolumeLayerToGCode
 writeGCode->GCodePlanner_writeGCode
 
-addVolumeToGCode->addInfillToGCode
-addVolumeToGCode->addInsetToGCode
+addVolumeLayerToGCode->addInfillToGCode
+addVolumeLayerToGCode->addInsetToGCode
 
 
 }
