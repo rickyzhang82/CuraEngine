@@ -42,6 +42,13 @@ if(CMAKE_BUILD_TYPE MATCHES DEBUG OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
     add_definitions(-DDEBUG)
 endif()
 
+option (ENABLE_TOOLPATH_PLANNIG_OUTPUT
+    "Enable toolpath planning output flags" OFF)
+if(ENABLE_PATH_OUTPUT)
+    message (STATUS "Compile with toolpath planning output")
+    add_definitions(-DENABLE_PATH_OUTPUT)
+endif()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall") # Add warnings
 
 option (ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS
