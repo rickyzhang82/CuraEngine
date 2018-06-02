@@ -3,6 +3,7 @@
 #define GCODEEXPORT_H
 
 #include <stdio.h>
+#include <utility>
 
 #include "settings.h"
 #include "comb.h"
@@ -161,6 +162,7 @@ private:
 private:
     GCodePath* getLatestPathWithConfig(GCodePathConfig* config);
     void forceNewPathStart();
+    void addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig* config);
 public:
     GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance);
     ~GCodePlanner();
@@ -222,8 +224,6 @@ public:
     void addExtrusionMove(Point p, GCodePathConfig* config);
     
     void moveInsideCombBoundary(int distance);
-
-    void addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig* config);
 
     void addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* config);
     
