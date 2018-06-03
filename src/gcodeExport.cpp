@@ -451,7 +451,7 @@ void GCodePlanner::forceNewPathStart()
         paths[paths.size()-1].done = true;
 }
 
-GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance)
+GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance, int layerIndex)
 : gcode(gcode), travelConfig(travelSpeed, 0, "travel")
 {
     lastPosition = gcode.getPositionXY();
@@ -465,6 +465,7 @@ GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMi
     currentExtruder = gcode.getExtruderNr();
     this->retractionMinimalDistance = retractionMinimalDistance;
     this->partIndexToPointsPairMap = std::make_shared<PART_INDEX_TO_POINTS_PAIR_MAP>();
+    this->layerIndex = layerIndex;
 }
 
 GCodePlanner::~GCodePlanner()
@@ -560,7 +561,7 @@ void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* c
         addPolygon(polygons[nr], orderOptimizer.polyStart[nr], config);
     }
 
-    if(-1 != partIndex) {
+    if(-1 != partIndex && orderOptimizer.polyOrder.size() > 0) {
         //the index of first polygon
         int entryPolygonIndex = orderOptimizer.polyOrder[0];
         // the index of first point in the polygon

@@ -172,12 +172,13 @@ private:
     bool alwaysRetract;
     double extraTime;
     double totalPrintTime;
+    int layerIndex;
 private:
     GCodePath* getLatestPathWithConfig(GCodePathConfig* config);
     void forceNewPathStart();
     void addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig* config);
 public:
-    GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance);
+    GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance, int layerIndex);
     virtual ~GCodePlanner();
     
     bool setExtruder(int extruder)
@@ -191,6 +192,11 @@ public:
     int getExtruder()
     {
         return currentExtruder;
+    }
+
+    int getLayerIndex()
+    {
+        return layerIndex;
     }
 
     void setCombBoundary(Polygons* polygons)
@@ -251,6 +257,10 @@ public:
     void forceMinimalLayerTime(double minTime, int minimalSpeed);
     
     void writeGCode(bool liftHeadIfNeeded, int layerThickness);
+
+    std::shared_ptr<PART_INDEX_TO_POINTS_PAIR_MAP> getPartIndexToPointsPairMap() {
+        return this->partIndexToPointsPairMap;
+    }
 };
 
 }//namespace cura

@@ -19,6 +19,6 @@ elif [ "$1" == "production" ];
         make VERBOSE=1 -j 8
 else
         echo "Build for releaase with G3LOG"
-        cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_G3LOG=ON  -DENABLE_PATH_OUTPUT=ON ..
+        cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_G3LOG=ON -DENABLE_PATH_OUTPUT=ON ..
         make VERBOSE=1 -j 8
 fi
