@@ -622,12 +622,12 @@ private:
             // Add either infill or perimeter first depending on option
             if (!config.perimeterBeforeInfill) 
             {
-                addInfillToGCode(part, gcodeLayer, layerNr, extrusionWidth, fillAngle);
-                addInsetToGCode(part, gcodeLayer, layerNr);
+                addInfillToGCode(part, gcodeLayer, layerNr, extrusionWidth, fillAngle, partOrderOptimizer.polyOrder[partCounter]);
+                addInsetToGCode(part, gcodeLayer, layerNr, partOrderOptimizer.polyOrder[partCounter]);
             }else
             {
-                addInsetToGCode(part, gcodeLayer, layerNr);
-                addInfillToGCode(part, gcodeLayer, layerNr, extrusionWidth, fillAngle);
+                addInsetToGCode(part, gcodeLayer, layerNr, partOrderOptimizer.polyOrder[partCounter]);
+                addInfillToGCode(part, gcodeLayer, layerNr, extrusionWidth, fillAngle, partOrderOptimizer.polyOrder[partCounter]);
             }
             
             Polygons skinPolygons;
@@ -653,7 +653,7 @@ private:
         gcodeLayer.setCombBoundary(nullptr);
     }
 
-    void addInfillToGCode(SliceLayerPart* part, GCodePlanner& gcodeLayer, int layerNr, int extrusionWidth, int fillAngle)
+    void addInfillToGCode(SliceLayerPart* part, GCodePlanner& gcodeLayer, int layerNr, int extrusionWidth, int fillAngle, int partNr)
     {
         Polygons infillPolygons;
         if (config.sparseInfillLineDistance > 0)
@@ -689,10 +689,10 @@ private:
             }
         }
 
-        gcodeLayer.addPolygonsByOptimizer(infillPolygons, &infillConfig);
+        gcodeLayer.addPolygonsByOptimizer(infillPolygons, &infillConfig, partNr);
     }
 
-    void addInsetToGCode(SliceLayerPart* part, GCodePlanner& gcodeLayer, int layerNr)
+    void addInsetToGCode(SliceLayerPart* part, GCodePlanner& gcodeLayer, int layerNr, int partNr)
     {
         if (config.insetCount > 0)
         {
@@ -701,14 +701,14 @@ private:
                 if (static_cast<int>(layerNr) >= config.downSkinCount)
                     inset0Config.spiralize = true;
                 if (static_cast<int>(layerNr) == config.downSkinCount && part->insets.size() > 0)
-                    gcodeLayer.addPolygonsByOptimizer(part->insets[0], &insetXConfig);
+                    gcodeLayer.addPolygonsByOptimizer(part->insets[0], &insetXConfig, partNr);
             }
             for(int insetNr=part->insets.size()-1; insetNr>-1; insetNr--)
             {
                 if (insetNr == 0)
-                    gcodeLayer.addPolygonsByOptimizer(part->insets[insetNr], &inset0Config);
+                    gcodeLayer.addPolygonsByOptimizer(part->insets[insetNr], &inset0Config, partNr);
                 else
-                    gcodeLayer.addPolygonsByOptimizer(part->insets[insetNr], &insetXConfig);
+                    gcodeLayer.addPolygonsByOptimizer(part->insets[insetNr], &insetXConfig, partNr);
             }
         }
     }

@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 #include <utility>
+#include <map>
+#include <memory>
 
 #include "settings.h"
 #include "comb.h"
@@ -138,6 +140,16 @@ public:
     bool done;//Path is finished, no more moves should be added, and a new path should be started instead of any appending done to this one.
 };
 
+/**
+ * @brief POINTS_PAIR a pair of entry point and exit point of the part
+ */
+typedef std::pair<Point, Point> POINTS_PAIR;
+
+/**
+ * @brief partIndexToPointsPairMap a map from the index of part to points pair
+ */
+typedef std::map<int, std::shared_ptr<POINTS_PAIR>> PART_INDEX_TO_POINTS_PAIR_MAP;
+
 //The GCodePlanner class stores multiple moves that are planned.
 // It facilitates the combing to keep the head inside the print.
 // It also keeps track of the print time estimate for this planning so speed adjustments can be made for the minimal-layer-time.
@@ -149,6 +161,7 @@ private:
     Point lastPosition;
     vector<GCodePath> paths;
     Comb* comb;
+    std::shared_ptr<PART_INDEX_TO_POINTS_PAIR_MAP> partIndexToPointsPairMap;
     
     GCodePathConfig travelConfig;
     int extrudeSpeedFactor;
@@ -165,7 +178,7 @@ private:
     void addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig* config);
 public:
     GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance);
-    ~GCodePlanner();
+    virtual ~GCodePlanner();
     
     bool setExtruder(int extruder)
     {
@@ -226,7 +239,15 @@ public:
     void moveInsideCombBoundary(int distance);
 
     void addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* config);
-    
+
+    /**
+     * @brief addPolygonsByOptimizer add polygons into paths of GCodePlanner with optimized order.
+     * @param polygons a set of closed polygon
+     * @param config path config
+     * @param partIndex the index of original part in the parts, i.e. SliceLayer::parts :- vector<SliceLayerPart>. Not the optimized order!
+     */
+    void addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* config, int partIndex);
+
     void forceMinimalLayerTime(double minTime, int minimalSpeed);
     
     void writeGCode(bool liftHeadIfNeeded, int layerThickness);

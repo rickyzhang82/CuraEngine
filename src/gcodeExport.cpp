@@ -464,11 +464,14 @@ GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMi
     alwaysRetract = false;
     currentExtruder = gcode.getExtruderNr();
     this->retractionMinimalDistance = retractionMinimalDistance;
+    this->partIndexToPointsPairMap = std::make_shared<PART_INDEX_TO_POINTS_PAIR_MAP>();
 }
+
 GCodePlanner::~GCodePlanner()
 {
     if (comb)
         delete comb;
+    partIndexToPointsPairMap->clear();
 }
 
 void GCodePlanner::addTravel(Point p)
@@ -542,6 +545,11 @@ void GCodePlanner::addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig*
 
 void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* config)
 {
+    addPolygonsByOptimizer(polygons, config, -1);
+}
+
+void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* config, int partIndex)
+{
     PathOrderOptimizer orderOptimizer(lastPosition);
     for(unsigned int i=0;i<polygons.size();i++)
         orderOptimizer.addPolygon(polygons[i]);
@@ -550,6 +558,19 @@ void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* c
     {
         int nr = orderOptimizer.polyOrder[i];
         addPolygon(polygons[nr], orderOptimizer.polyStart[nr], config);
+    }
+
+    if(-1 != partIndex) {
+        //the index of first polygon
+        int entryPolygonIndex = orderOptimizer.polyOrder[0];
+        // the index of first point in the polygon
+        int entryPointIndex = orderOptimizer.polyStart[entryPolygonIndex];
+        // the entry point of the part
+        Point entryPoint = polygons[entryPolygonIndex][entryPointIndex];
+        // the exit point of the part
+        Point exitPoint = lastPosition;
+        auto pointPair = std::make_shared<POINTS_PAIR>(entryPoint, exitPoint);
+        partIndexToPointsPairMap->insert(std::pair<int, std::shared_ptr<POINTS_PAIR>>(partIndex, pointPair));
     }
 }
 
