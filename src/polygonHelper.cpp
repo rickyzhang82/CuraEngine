@@ -61,9 +61,8 @@ void PolygonHelper::savePartsToFile(SliceDataStorage& storage)
     partFile.close();
 }
 
-void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
+void PolygonHelper::lazyInitPointFile()
 {
-    //TODO: add logic
     // lazy initiliation
     if(nullptr == pointFile) {
         string filePath = CURA_DEBUG_ROOT_OUTPUT_FILE_PATH + "/" + CURA_DEBUG_FILE_NAME_POINTS_PAIRS;
@@ -71,9 +70,18 @@ void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
         pointFile->open (filePath.c_str());
         cLog("Created a new point pairs file %s\n", filePath.c_str());
     }
+}
 
-    *pointFile << "layer index:" << gcodeLayer.getLayerIndex() << endl;
-    cLog("Saved entry and exit point of parts at layer %d.", gcodeLayer.getLayerIndex());
+void PolygonHelper::saveLayerIndexToPointPairsFile(int layerNr)
+{
+    lazyInitPointFile();
+    *pointFile << "layer index:" << layerNr << endl;
+}
+
+void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
+{
+    lazyInitPointFile();
+
     auto pointPairMap = gcodeLayer.getPartIndexToPointsPairMap();
     // loop through points pair by part order
      for (PART_INDEX_TO_POINTS_PAIR_MAP::iterator it=pointPairMap->begin(); it!=pointPairMap->end(); ++it) {

@@ -451,7 +451,7 @@ void GCodePlanner::forceNewPathStart()
         paths[paths.size()-1].done = true;
 }
 
-GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance, int layerIndex)
+GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance)
 : gcode(gcode), travelConfig(travelSpeed, 0, "travel")
 {
     lastPosition = gcode.getPositionXY();
@@ -465,7 +465,6 @@ GCodePlanner::GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMi
     currentExtruder = gcode.getExtruderNr();
     this->retractionMinimalDistance = retractionMinimalDistance;
     this->partIndexToPointsPairMap = std::make_shared<PART_INDEX_TO_POINTS_PAIR_MAP>();
-    this->layerIndex = layerIndex;
 }
 
 GCodePlanner::~GCodePlanner()
@@ -560,7 +559,7 @@ void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* c
         int nr = orderOptimizer.polyOrder[i];
         addPolygon(polygons[nr], orderOptimizer.polyStart[nr], config);
     }
-
+#ifdef ENABLE_PATH_OUTPUT
     if(-1 != partIndex && orderOptimizer.polyOrder.size() > 0) {
         //the index of first polygon
         int entryPolygonIndex = orderOptimizer.polyOrder[0];
@@ -570,9 +569,20 @@ void GCodePlanner::addPolygonsByOptimizer(Polygons& polygons, GCodePathConfig* c
         Point entryPoint = polygons[entryPolygonIndex][entryPointIndex];
         // the exit point of the part
         Point exitPoint = lastPosition;
-        auto pointPair = std::make_shared<POINTS_PAIR>(entryPoint, exitPoint);
-        partIndexToPointsPairMap->insert(std::pair<int, std::shared_ptr<POINTS_PAIR>>(partIndex, pointPair));
+        // first check if point paris exists in partIndex
+        auto mapEntry = partIndexToPointsPairMap->find(partIndex);
+        if(mapEntry != partIndexToPointsPairMap->end()) {
+            // a point pair is found for partIndex, so only update the exit point
+            auto existingPointPair = mapEntry->second;
+            // update the exit point
+            existingPointPair->second = exitPoint;
+        } else {
+            // a point pair is not found for partIndex, so create one
+            auto newPointPair = std::make_shared<POINTS_PAIR>(entryPoint, exitPoint);
+            partIndexToPointsPairMap->insert(std::pair<int, std::shared_ptr<POINTS_PAIR>>(partIndex, newPointPair));
+        }
     }
+#endif
 }
 
 void GCodePlanner::forceMinimalLayerTime(double minTime, int minimalSpeed)

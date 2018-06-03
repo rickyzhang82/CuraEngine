@@ -31,6 +31,11 @@ public:
      */
     static void savePartsToFile(SliceDataStorage& storage);
     /**
+     * @brief saveLayerIndexToPointPairsFile save layer index to point pairs file
+     * @param layerNr
+     */
+    static void saveLayerIndexToPointPairsFile(int layerNr);
+    /**
      * @brief savePointPairsInPartsToFile save the entry point and the exit point of the parts into external text file. See file format in https://gist.github.com/rickyzhang82/a6b62a2948c4e1e2fe8893f7cc7160aa
      * @param gcodeLayer
      */
@@ -41,6 +46,10 @@ protected:
      * @brief pointFile
      */
     static std::shared_ptr<ofstream> pointFile;
+    /**
+     * @brief lazyInitPointFile lazy initialiation point pairs file
+     */
+    static void lazyInitPointFile();
 };
 
 }

@@ -172,13 +172,12 @@ private:
     bool alwaysRetract;
     double extraTime;
     double totalPrintTime;
-    int layerIndex;
 private:
     GCodePath* getLatestPathWithConfig(GCodePathConfig* config);
     void forceNewPathStart();
     void addPolygon(PolygonRef polygon, int startIdx, GCodePathConfig* config);
 public:
-    GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance, int layerIndex);
+    GCodePlanner(GCodeExport& gcode, int travelSpeed, int retractionMinimalDistance);
     virtual ~GCodePlanner();
     
     bool setExtruder(int extruder)
@@ -192,11 +191,6 @@ public:
     int getExtruder()
     {
         return currentExtruder;
-    }
-
-    int getLayerIndex()
-    {
-        return layerIndex;
     }
 
     void setCombBoundary(Polygons* polygons)

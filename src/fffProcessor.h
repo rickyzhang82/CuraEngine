@@ -386,7 +386,7 @@ private:
             {
                 gcode.writeComment("LAYER:-2");
                 gcode.writeComment("RAFT");
-                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance, -2);
+                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance);
                 if (config.supportExtruder > 0)
                     gcodeLayer.setExtruder(config.supportExtruder);
                 gcode.setZ(config.raftBaseThickness);
@@ -409,7 +409,7 @@ private:
             {
                 gcode.writeComment("LAYER:-1");
                 gcode.writeComment("RAFT");
-                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance, -1);
+                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance);
                 gcode.setZ(config.raftBaseThickness + config.raftInterfaceThickness);
                 gcode.setExtrusion(config.raftInterfaceThickness, config.filamentDiameter, config.filamentFlow);
 
@@ -424,7 +424,7 @@ private:
             {
                 gcode.writeComment("LAYER:-1");
                 gcode.writeComment("RAFT");
-                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance, -1);
+                GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance);
                 gcode.setZ(config.raftBaseThickness + config.raftInterfaceThickness + config.raftSurfaceThickness*raftSurfaceLayer);
                 gcode.setExtrusion(config.raftSurfaceThickness, config.filamentDiameter, config.filamentFlow);
 
@@ -471,7 +471,7 @@ private:
             else
                 gcode.setExtrusion(config.layerThickness, config.filamentDiameter, config.filamentFlow);
 
-            GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance, layerNr);
+            GCodePlanner gcodeLayer(gcode, config.moveSpeed, config.retractionMinimalDistance);
             int32_t z = config.initialLayerThickness + layerNr * config.layerThickness;
             z += config.raftBaseThickness + config.raftInterfaceThickness + config.raftSurfaceLayers*config.raftSurfaceThickness;
             if (config.raftBaseThickness > 0 && config.raftInterfaceThickness > 0)
@@ -595,7 +595,10 @@ private:
             return;
         }
 
-
+#ifdef ENABLE_PATH_OUTPUT
+        cLog("Saving entry and exit point of parts for layer %d.", layerNr);
+        cura::PolygonHelper::saveLayerIndexToPointPairsFile(layerNr);
+#endif
         PathOrderOptimizer partOrderOptimizer(gcode.getStartPositionXY());
         for(unsigned int partNr=0; partNr<layer->parts.size(); partNr++)
         {
@@ -634,11 +637,6 @@ private:
                 addInfillToGCode(part, gcodeLayer, layerNr, extrusionWidth, fillAngle, partOrderOptimizer.polyOrder[partCounter]);
             }
 
-#ifdef ENABLE_PATH_OUTPUT
-              cLog("Saving entry and exit point of the parts to the file.\n");
-              cura::PolygonHelper::savePointPairsInPartsToFile(gcodeLayer);
-#endif
-
             Polygons skinPolygons;
             for(Polygons outline : part->skinOutline.splitIntoParts())
             {
@@ -661,6 +659,10 @@ private:
 
         }
         gcodeLayer.setCombBoundary(nullptr);
+#ifdef ENABLE_PATH_OUTPUT
+            cLog("Saving entry and exit point of the parts to the file.\n");
+            cura::PolygonHelper::savePointPairsInPartsToFile(gcodeLayer);
+#endif
     }
 
     void addInfillToGCode(SliceLayerPart* part, GCodePlanner& gcodeLayer, int layerNr, int extrusionWidth, int fillAngle, int partNr)
