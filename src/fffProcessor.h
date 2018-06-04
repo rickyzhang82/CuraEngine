@@ -218,6 +218,7 @@ private:
                 storage.volumes[volumeIdx].layers[layerNr].printZ += config.raftBaseThickness + config.raftInterfaceThickness;
         }
 #ifdef ENABLE_PATH_OUTPUT
+        cura::PolygonHelper::setModelMin(storage.modelMin);
         //DEBUG: output parts
         cLog("Generating parts output to file.\n");
         dumpLayerparts(storage, "/tmp/parts.html");

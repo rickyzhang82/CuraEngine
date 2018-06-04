@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <stdexcept>
 using namespace std;
 
 #include "utils/polygon.h"
@@ -24,7 +25,6 @@ const string CURA_DEBUG_ROOT_OUTPUT_FILE_PATH   = "/tmp";
 class PolygonHelper
 {
 public:
-    PolygonHelper();
     /**
      * @brief savePartsToFile save the closed polygons of parts into external text file. See file format in https://gist.github.com/rickyzhang82/33831c6d5a3eaaa3de3ffb5122f15b69
      * @param storage
@@ -40,16 +40,27 @@ public:
      * @param gcodeLayer
      */
     static void savePointPairsInPartsToFile(GCodePlanner& gcodeLayer);
+    /**
+     * @brief closePointPairsFile close point pairs file stream
+     */
     static void closePointPairsFile();
+    /**
+     * @brief setModelMin set model min for model translation purpose
+     * @param modelMin
+     */
+    static void setModelMin(Point3 modelMin);
 protected:
+    PolygonHelper();
     /**
      * @brief pointFile
      */
-    static std::shared_ptr<ofstream> pointFile;
+    static shared_ptr<ofstream> pointFile;
     /**
      * @brief lazyInitPointFile lazy initialiation point pairs file
      */
     static void lazyInitPointFile();
+
+    static shared_ptr<Point3> modelMin;
 };
 
 }

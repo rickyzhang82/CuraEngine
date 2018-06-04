@@ -3,16 +3,26 @@
 
 namespace cura {
 
-std::shared_ptr<ofstream> PolygonHelper::pointFile = nullptr;
+shared_ptr<ofstream> PolygonHelper::pointFile = nullptr;
+shared_ptr<Point3> PolygonHelper::modelMin = nullptr;
 
 PolygonHelper::PolygonHelper()
 {
 
 }
 
+void PolygonHelper::setModelMin(Point3 modelMin)
+{
+    PolygonHelper::modelMin = std::make_shared<Point3>(modelMin.x , modelMin.y, modelMin.z);
+}
+
 void PolygonHelper::savePartsToFile(SliceDataStorage& storage)
 {
-    Point3 modelMin = storage.modelMin;
+    if(nullptr == modelMin) {
+        cLog("Failed to provide modelMin!\n");
+        throw new std::runtime_error("No valid modelMin!");
+    }
+
     Point3 modelSize = storage.modelSize;
     ofstream partFile;
 
@@ -45,9 +55,9 @@ void PolygonHelper::savePartsToFile(SliceDataStorage& storage)
                     // the first polygon is the outer wall of the part!
                     for(unsigned int pointNr = 0; pointNr < part->outline[polygonNr].size(); pointNr++)
                     {
-                        partFile << (part->outline[polygonNr][pointNr].X - modelMin.x)
+                        partFile << (part->outline[polygonNr][pointNr].X - modelMin->x)
                                  << " "
-                                 << (part->outline[polygonNr][pointNr].Y - modelMin.y)
+                                 << (part->outline[polygonNr][pointNr].Y - modelMin->y)
                                  <<" ";
                     }
                     // end of outline
@@ -80,6 +90,11 @@ void PolygonHelper::saveLayerIndexToPointPairsFile(int layerNr)
 
 void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
 {
+    if(nullptr == modelMin) {
+        cLog("Failed to provide modelMin!\n");
+        throw new std::runtime_error("No valid modelMin!");
+    }
+
     lazyInitPointFile();
 
     auto pointPairMap = gcodeLayer.getPartIndexToPointsPairMap();
@@ -87,13 +102,13 @@ void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
      for (PART_INDEX_TO_POINTS_PAIR_MAP::iterator it=pointPairMap->begin(); it!=pointPairMap->end(); ++it) {
         *pointFile << "part index:" << it->first << endl;
          auto pointPair = it->second;
-        *pointFile << pointPair->first.X
+        *pointFile << pointPair->first.X - modelMin->x
                    << " "
-                   << pointPair->first.Y
+                   << pointPair->first.Y - modelMin->y
                    << " "
-                   << pointPair->second.X
+                   << pointPair->second.X - modelMin->x
                    << " "
-                   << pointPair->second.Y
+                   << pointPair->second.Y - modelMin->y
                    << endl;
      }
 }
