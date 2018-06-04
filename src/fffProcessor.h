@@ -495,6 +495,10 @@ private:
             {
                 if (volumeCnt > 0)
                     volumeIdx = (volumeIdx + 1) % storage.volumes.size();
+#ifdef ENABLE_PATH_OUTPUT
+        cLog("Saving entry and exit point of parts for volume %d.", volumeIdx);
+        cura::PolygonHelper::saveVolumeIndexToPointPairsFile(volumeIdx);
+#endif
                 addVolumeLayerToGCode(storage, gcodeLayer, volumeIdx, layerNr);
             }
             if (!printSupportFirst)
@@ -651,7 +655,7 @@ private:
                 gcodeLayer.setCombBoundary(nullptr);
                 gcodeLayer.setAlwaysRetract(true);
             }
-            gcodeLayer.addPolygonsByOptimizer(skinPolygons, &skinConfig);
+            gcodeLayer.addPolygonsByOptimizer(skinPolygons, &skinConfig, partOrderOptimizer.polyOrder[partCounter]);
 
 
             //After a layer part, make sure the nozzle is inside the comb boundary, so we do not retract on the perimeter.

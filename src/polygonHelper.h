@@ -31,6 +31,11 @@ public:
      */
     static void savePartsToFile(SliceDataStorage& storage);
     /**
+     * @brief saveVolumeIndexToPointPairsFile save volume index to point paris file
+     * @param volumeIdx
+     */
+    static void saveVolumeIndexToPointPairsFile(int volumeIdx);
+    /**
      * @brief saveLayerIndexToPointPairsFile save layer index to point pairs file
      * @param layerNr
      */

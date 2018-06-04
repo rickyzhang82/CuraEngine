@@ -88,6 +88,12 @@ void PolygonHelper::saveLayerIndexToPointPairsFile(int layerNr)
     *pointFile << "layer index:" << layerNr << endl;
 }
 
+void PolygonHelper::saveVolumeIndexToPointPairsFile(int volumeIdx)
+{
+    lazyInitPointFile();
+    *pointFile << "volume index:" << volumeIdx << endl;
+}
+
 void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
 {
     if(nullptr == modelMin) {

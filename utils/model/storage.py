@@ -14,7 +14,12 @@ class Storage:
         self.model_size_y = None
 
     def get_volume(self, index):
+        if index >= len(self._volumes):
+            raise RuntimeError('Failed to get volume at index %d' % index)
         return self._volumes[index]
+
+    def get_volumes_size(self):
+        return len(self._volumes)
 
     def add_volume(self, volume):
         self._volumes.append(volume)
@@ -25,12 +30,17 @@ class Volume:
         self._layers = list()
 
     def get_layer(self, index):
+        if index >= len(self._layers):
+            raise RuntimeError('Failed to get layer at index %d' % index)
         return self._layers[index]
+
+    def get_layer_size(self):
+        return len(self._layers)
 
     def add_layer(self, layer):
         self._layers.append(layer)
 
-    def get_layer_size(self):
+    def get_layers_size(self):
         return len(self._layers)
 
 
@@ -38,7 +48,12 @@ class Layer:
     def __init__(self):
         self._parts = list()
 
+    def get_all_parts(self):
+        return self._parts
+
     def get_part(self, index):
+        if index >= len(self._parts):
+            raise RuntimeError('Failed to get part at index %d' % index)
         return self._parts[index]
 
     def get_parts_size(self):
@@ -51,6 +66,17 @@ class Layer:
 class Part:
     def __init__(self):
         self._polygons = list()
+        self.entry_point = Point()
+        self.exit_point = Point()
+
+    def get_outer_outline(self):
+        return self._polygons[0]
+
+    def get_inner_outlines(self):
+        if self.get_outlines_size() > 1:
+            return self._polygons[1:]
+        else:
+            return None
 
     def get_outline(self, index):
         return self._polygons[index]
@@ -83,3 +109,15 @@ class Polygon:
         self._points_at_x.append(x)
         self._points_at_y.append(y)
 
+
+class Point:
+    def __init__(self, x=None, y=None):
+        if x is not None:
+            self.x = x
+        else:
+            self.x = None
+
+        if y is not None:
+            self.y = y
+        else:
+            self.y = None
