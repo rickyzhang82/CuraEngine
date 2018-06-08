@@ -498,6 +498,7 @@ private:
 #ifdef ENABLE_PATH_OUTPUT
         cLog("Saving entry and exit point of parts for volume %d.", volumeIdx);
         cura::PolygonHelper::saveVolumeIndexToPointPairsFile(volumeIdx);
+        cura::PolygonHelper::saveVolumeIndexToPartsOrderFile(volumeIdx);
 #endif
                 addVolumeLayerToGCode(storage, gcodeLayer, volumeIdx, layerNr);
             }
@@ -533,6 +534,7 @@ private:
         maxObjectHeight = std::max(maxObjectHeight, storage.modelSize.z - config.objectSink);
 #ifdef ENABLE_PATH_OUTPUT
         cura::PolygonHelper::closePointPairsFile();
+        cura::PolygonHelper::closePartsOrderFile();
 #endif
     }
 
@@ -610,6 +612,11 @@ private:
             partOrderOptimizer.addPolygon(layer->parts[partNr].insets[0][0]);
         }
         partOrderOptimizer.optimize();
+
+#ifdef ENABLE_PATH_OUTPUT
+        cLog("Saving parts order for layer %d.", layerNr);
+        cura::PolygonHelper::saveOptimizedPartsOrderToFile(partOrderOptimizer.polyOrder, layerNr);
+#endif
 
         for(unsigned int partCounter=0; partCounter<partOrderOptimizer.polyOrder.size(); partCounter++)
         {

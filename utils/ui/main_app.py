@@ -58,6 +58,7 @@ class MainApp:
         self.selected_layer_index = IntVar()
         self.enable_legend = IntVar()
         self.enable_part_num = IntVar()
+        self.enable_part_order = IntVar()
 
         self.file_panel = Frame(self.master, name="file")
         self.file_panel.grid(row=0, column=0)
@@ -73,8 +74,12 @@ class MainApp:
         legend_check_button.grid(row=0, column=2, sticky=W)
 
         part_num_check_button = Checkbutton(self.file_panel, text="Show Part Number", variable=self.enable_part_num,
-                                            command=lambda: self.refresh_graph(self.selected_layer_index.get() - 1))
+                                            command=lambda: self.flip_part_num_check_button(self.selected_layer_index.get() - 1))
         part_num_check_button.grid(row=0, column=3, sticky=W)
+
+        part_order_check_button = Checkbutton(self.file_panel, text="Show Part Order", variable=self.enable_part_order,
+                                              command=lambda: self.flip_part_order_check_button(self.selected_layer_index.get() - 1))
+        part_order_check_button.grid(row=0, column=4, sticky=W)
 
         # plot
         self.figure = Figure()
@@ -201,6 +206,16 @@ class MainApp:
         new_ordered_index_list = [part_index_dict[part] for part in new_ordered_parts]
         return new_ordered_index_list
 
+    def flip_part_num_check_button(self, layer_index):
+        if self.enable_part_num.get() + self.enable_part_order.get() == 2:
+            self.enable_part_order.set(0)
+        self.refresh_graph(layer_index)
+
+    def flip_part_order_check_button(self, layer_index):
+        if self.enable_part_num.get() + self.enable_part_order.get() == 2:
+            self.enable_part_num.set(0)
+        self.refresh_graph(layer_index)
+
     def refresh_graph(self, layer_index=0):
         self.ax.clear()
         self.ax.set_xlim(0, self._storage.model_size_x / 1000)
@@ -237,6 +252,8 @@ class MainApp:
                         fill_color = 'y'
                         if self.enable_part_num.get() == 1:
                             self.ax.text(x[0], y[0], text(part_nr))
+                        if self.enable_part_order.get() == 1:
+                            self.ax.text(x[0], y[0], text(part.order))
                     else:
                         fill_color = 'w'
                     self.ax.fill(x, y, fill_color)

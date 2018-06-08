@@ -17,9 +17,11 @@ class DataFileHelper:
     KEY_INDEX_PART = 'part index:'
     KEY_INDEX_OUTLINE = 'outline index:'
     KEY_SIZE_MODEL = 'model size:'
+    KEY_PART_ORDER = 'part order index:'
 
     FILE_NAME_PARTS = text('parts_by_layers.txt')
     FILE_NAME_POINTS_PAIRS = text('parts_points_pairs.txt')
+    FILE_NAME_PARTS_ORDER = text('parts_order.txt')
 
     def __init__(self):
         pass
@@ -38,9 +40,50 @@ class DataFileHelper:
             os.path.join(file_dir, DataFileHelper.FILE_NAME_PARTS))
         if storage is None:
             return None, msg
+        aggr_msg = msg
         point_pairs_file_path = os.path.join(file_dir, DataFileHelper.FILE_NAME_POINTS_PAIRS)
         storage, msg = DataFileHelper.load_point_pairs_file(point_pairs_file_path, storage)
-        return storage, msg
+        aggr_msg = aggr_msg + '\n' + msg
+
+        parts_order_file_path = os.path.join(file_dir, DataFileHelper.FILE_NAME_PARTS_ORDER)
+        storage, msg = DataFileHelper.load_parts_order_file(parts_order_file_path, storage)
+        aggr_msg = aggr_msg + '\n' + msg
+
+        return storage, aggr_msg
+
+    @staticmethod
+    def load_parts_order_file(file_path, storage):
+        """
+        load parts order file into memory
+        :param file_path: file path to parts order file
+        :param storage:  a loaded storage object
+        :return: a storage object with parts order
+        """
+        assert isinstance(file_path, text)
+        if not os.path.isfile(file_path):
+            return None, "file %s doesn't exist!" % file_path
+        assert isinstance(storage, Storage)
+        # initialize index
+        volume_index = None
+        layer_index = None
+        part_order_index = None
+
+        with open(file_path, 'r') as part_file:
+            for line in part_file:
+                if line.startswith(DataFileHelper.KEY_INDEX_VOLUME):
+                    volume_index = int(line[len(DataFileHelper.KEY_INDEX_VOLUME):])
+                elif line.startswith(DataFileHelper.KEY_INDEX_LAYER):
+                    layer_index = int(line[len(DataFileHelper.KEY_INDEX_LAYER):])
+                elif line.startswith(DataFileHelper.KEY_PART_ORDER):
+                    part_order_index = int(line[len(DataFileHelper.KEY_PART_ORDER):])
+                else:
+                    # read point list into polygon
+                    part_index = int(line)
+                    volume = storage.get_volume(volume_index)
+                    layer = volume.get_layer(layer_index)
+                    part = layer.get_part(part_index)
+                    part.order = part_order_index
+        return storage, 'Succeeded in loading parts order from data file!'
 
     @staticmethod
     def load_point_pairs_file(file_path, storage):

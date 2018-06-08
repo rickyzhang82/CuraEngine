@@ -4,6 +4,7 @@
 namespace cura {
 
 shared_ptr<ofstream> PolygonHelper::pointFile = nullptr;
+shared_ptr<ofstream> PolygonHelper::partOrderFile = nullptr;
 shared_ptr<Point3> PolygonHelper::modelMin = nullptr;
 
 PolygonHelper::PolygonHelper()
@@ -18,7 +19,8 @@ void PolygonHelper::setModelMin(Point3 modelMin)
 
 void PolygonHelper::savePartsToFile(SliceDataStorage& storage)
 {
-    if(nullptr == modelMin) {
+    if(nullptr == modelMin)
+    {
         cLog("Failed to provide modelMin!\n");
         throw new std::runtime_error("No valid modelMin!");
     }
@@ -74,7 +76,8 @@ void PolygonHelper::savePartsToFile(SliceDataStorage& storage)
 void PolygonHelper::lazyInitPointFile()
 {
     // lazy initiliation
-    if(nullptr == pointFile) {
+    if(nullptr == pointFile)
+    {
         string filePath = CURA_DEBUG_ROOT_OUTPUT_FILE_PATH + "/" + CURA_DEBUG_FILE_NAME_POINTS_PAIRS;
         pointFile = std::make_shared<ofstream>();
         pointFile->open (filePath.c_str());
@@ -96,7 +99,8 @@ void PolygonHelper::saveVolumeIndexToPointPairsFile(int volumeIdx)
 
 void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
 {
-    if(nullptr == modelMin) {
+    if(nullptr == modelMin)
+    {
         cLog("Failed to provide modelMin!\n");
         throw new std::runtime_error("No valid modelMin!");
     }
@@ -105,7 +109,8 @@ void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
 
     auto pointPairMap = gcodeLayer.getPartIndexToPointsPairMap();
     // loop through points pair by part order
-     for (PART_INDEX_TO_POINTS_PAIR_MAP::iterator it=pointPairMap->begin(); it!=pointPairMap->end(); ++it) {
+     for (PART_INDEX_TO_POINTS_PAIR_MAP::iterator it=pointPairMap->begin(); it!=pointPairMap->end(); ++it)
+     {
         *pointFile << "part index:" << it->first << endl;
          auto pointPair = it->second;
         *pointFile << pointPair->first.X - modelMin->x
@@ -121,10 +126,51 @@ void PolygonHelper::savePointPairsInPartsToFile(GCodePlanner& gcodeLayer)
 
 void PolygonHelper::closePointPairsFile()
 {
-    if(nullptr != pointFile) {
+    if(nullptr != pointFile)
+    {
         pointFile->close();
         cLog("Closed point pairs file.\n");
         pointFile = nullptr;
+    }
+}
+
+void PolygonHelper::saveVolumeIndexToPartsOrderFile(int volumeIdx)
+{
+    lazyInitPartsOrderFile();
+    *partOrderFile << "volume index:" << volumeIdx << endl;
+}
+
+void PolygonHelper::saveOptimizedPartsOrderToFile(std::vector<int>& polyOrder, int layerNr)
+{
+    *partOrderFile << "layer index:" << layerNr << endl;
+
+    for(unsigned int partCounter = 0; partCounter < polyOrder.size(); partCounter++)
+    {
+        *partOrderFile << "part order index:" << partCounter << endl;
+        *partOrderFile << polyOrder[partCounter] << endl;
+    }
+}
+
+
+void PolygonHelper::closePartsOrderFile()
+{
+    if(nullptr != partOrderFile)
+    {
+        partOrderFile->close();
+        cLog("Closed parts order file.\n");
+        partOrderFile = nullptr;
+    }
+}
+
+void PolygonHelper::lazyInitPartsOrderFile()
+{
+    // lazy initiliation
+    if(nullptr == partOrderFile)
+    {
+        string filePath = CURA_DEBUG_ROOT_OUTPUT_FILE_PATH + "/" + CURA_DEBUG_FILE_NAME_PARTS_ORDER;
+        partOrderFile = std::make_shared<ofstream>();
+        partOrderFile->open (filePath.c_str());
+        cLog("Created a new parts order file %s\n", filePath.c_str());
     }
 }
 

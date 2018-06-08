@@ -20,6 +20,7 @@ namespace cura {
 
 const string CURA_DEBUG_FILE_NAME_PARTS         = "parts_by_layers.txt";
 const string CURA_DEBUG_FILE_NAME_POINTS_PAIRS  = "parts_points_pairs.txt";
+const string CURA_DEBUG_FILE_NAME_PARTS_ORDER  = "parts_order.txt";
 const string CURA_DEBUG_ROOT_OUTPUT_FILE_PATH   = "/tmp";
 
 class PolygonHelper
@@ -30,6 +31,21 @@ public:
      * @param storage
      */
     static void savePartsToFile(SliceDataStorage& storage);
+    /**
+     * @brief saveVolumeIndexToPartsOrderFile
+     * @param volumeIdx
+     */
+    static void saveVolumeIndexToPartsOrderFile(int volumeIdx);
+    /**
+     * @brief saveOptimizedPartsOrderToFile
+     * @param polyOrder
+     * @param layerNr
+     */
+    static void saveOptimizedPartsOrderToFile(std::vector<int>& polyOrder, int layerNr);
+    /**
+     * @brief closePartsOrderFile
+     */
+    static void closePartsOrderFile();
     /**
      * @brief saveVolumeIndexToPointPairsFile save volume index to point paris file
      * @param volumeIdx
@@ -61,9 +77,17 @@ protected:
      */
     static shared_ptr<ofstream> pointFile;
     /**
+     * @brief partOrderFile
+     */
+    static shared_ptr<ofstream> partOrderFile;
+    /**
      * @brief lazyInitPointFile lazy initialiation point pairs file
      */
     static void lazyInitPointFile();
+    /**
+     * @brief lazyInitPartsOrderFile lazy initialization parts order file
+     */
+    static void lazyInitPartsOrderFile();
 
     static shared_ptr<Point3> modelMin;
 };

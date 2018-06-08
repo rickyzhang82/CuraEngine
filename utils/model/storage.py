@@ -68,6 +68,7 @@ class Part:
         self._polygons = list()
         self.entry_point = Point()
         self.exit_point = Point()
+        self.order = None
 
     def get_outer_outline(self):
         return self._polygons[0]
