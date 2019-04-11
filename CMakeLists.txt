@@ -146,9 +146,6 @@ add_executable(CuraEngine src/main.cpp) # Then compile main.cpp as separate exec
 target_link_libraries(CuraEngine _CuraEngine)
 set_target_properties(CuraEngine PROPERTIES COMPILE_DEFINITIONS "VERSION=\"${CURA_ENGINE_VERSION}\"")
 
-add_custom_command(TARGET CuraEngine POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:CuraEngine>)
 
 # Installing CuraEngine.
 include(GNUInstallDirs)
